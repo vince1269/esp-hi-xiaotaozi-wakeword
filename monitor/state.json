@@ -1,13 +1,13 @@
 {
   "application_comment_id": 5164128467,
   "application_comment_url": "https://github.com/espressif/esp-sr/issues/88#issuecomment-5164128467",
-  "submitted_at": "2026-08-03T08:37:00Z",
-  "last_checked_at": null,
-  "last_seen_comment_id": 0,
+  "last_checked_at": "2026-08-03T08:49:06Z",
+  "last_seen_comment_id": 5164128467,
   "known_event_ids": [],
   "model_found": false,
   "model_paths": [],
   "release_matches": [],
   "issue_state": "open",
-  "consecutive_failures": 0
+  "consecutive_failures": 0,
+  "submitted_at": "2026-08-03T08:37:00Z"
 }
