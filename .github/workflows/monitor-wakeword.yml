@@ -22,11 +22,14 @@ jobs:
         with:
           python-version: "3.12"
       - name: Check ESP-SR
+        id: monitor
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TRACKING_REPOSITORY: ${{ github.repository }}
         run: python monitor/monitor.py
       - name: Persist state
+        if: always()
         run: |
           if ! git diff --quiet -- monitor/state.json; then
             git config user.name "github-actions[bot]"
@@ -35,3 +38,6 @@ jobs:
             git commit -m "chore: update wake-word monitor state"
             git push
           fi
+      - name: Propagate monitor failure
+        if: steps.monitor.outcome == 'failure'
+        run: exit 1

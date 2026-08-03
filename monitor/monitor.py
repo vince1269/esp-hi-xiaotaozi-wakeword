@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import sys
@@ -31,7 +32,8 @@ def default_state() -> dict:
     return {"application_comment_id": None, "application_comment_url": None,
             "last_checked_at": None, "last_seen_comment_id": 0,
             "known_event_ids": [], "model_found": False, "model_paths": [],
-            "release_matches": [], "issue_state": "open", "consecutive_failures": 0}
+            "release_matches": [], "issue_state": "open", "consecutive_failures": 0,
+            "application_body_sha256": None, "application_comment_updated_at": None}
 
 
 def load_state() -> dict:
@@ -105,6 +107,15 @@ def main() -> int:
         if app_id and not app_comment:
             events.append((f"application-missing:{app_id}", "Application comment unavailable", state.get("application_comment_url") or issue["html_url"],
                            "The original application comment could not be found.", True, "Check whether it was hidden, deleted, or migrated."))
+        if app_comment:
+            body_hash = hashlib.sha256((app_comment.get("body") or "").encode("utf-8")).hexdigest()
+            old_hash = state.get("application_body_sha256")
+            if old_hash and old_hash != body_hash:
+                events.append((f"application-modified:{body_hash}", "Application comment modified",
+                               app_comment["html_url"], "The application comment body changed.", True,
+                               "Review the change and confirm all ESP32-C3 and WakeNet9s details remain accurate."))
+            state["application_body_sha256"] = body_hash
+            state["application_comment_updated_at"] = app_comment.get("updated_at")
         for c in comments:
             cid = int(c.get("id", 0)); state["last_seen_comment_id"] = max(state.get("last_seen_comment_id", 0), cid)
             body = c.get("body") or ""
@@ -148,6 +159,16 @@ def main() -> int:
         return 0
     except Exception as exc:
         state["last_checked_at"] = now(); state["consecutive_failures"] = int(state.get("consecutive_failures", 0)) + 1
+        if state["consecutive_failures"] >= 2:
+            event_id = f"failure-streak:{state['consecutive_failures']}"
+            if event_id not in known:
+                try:
+                    repo = os.environ.get("TRACKING_REPOSITORY", "")
+                    tracking = int(os.environ.get("TRACKING_ISSUE_NUMBER", "1"))
+                    post_tracking(repo, tracking, f"## Wake-word monitor event\n\n- Discovered: {now()}\n- Event type: Repeated monitor failure\n- Source: https://github.com/{repo}/actions\n- Summary: The monitor has failed {state['consecutive_failures']} consecutive times.\n- Human action required: Yes\n- Recommended next step: Inspect the latest Actions logs and GitHub API availability.")
+                    known.add(event_id); state["known_event_ids"] = sorted(known)
+                except Exception:
+                    pass
         save_state(state)
         print(f"Monitor failed: {exc}", file=sys.stderr)
         return 1
