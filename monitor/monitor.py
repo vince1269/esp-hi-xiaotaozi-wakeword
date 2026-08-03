@@ -33,7 +33,8 @@ def default_state() -> dict:
             "last_checked_at": None, "last_seen_comment_id": 0,
             "known_event_ids": [], "model_found": False, "model_paths": [],
             "release_matches": [], "issue_state": "open", "consecutive_failures": 0,
-            "application_body_sha256": None, "application_comment_updated_at": None}
+            "application_body_sha256": None, "application_comment_updated_at": None,
+            "application_thumbs_up_count": 0, "upvote_target_reached": False}
 
 
 def load_state() -> dict:
@@ -116,6 +117,15 @@ def main() -> int:
                                "Review the change and confirm all ESP32-C3 and WakeNet9s details remain accurate."))
             state["application_body_sha256"] = body_hash
             state["application_comment_updated_at"] = app_comment.get("updated_at")
+            reactions = app_comment.get("reactions") or {}
+            thumbs_up = int(reactions.get("+1", 0))
+            previously_reached = bool(state.get("upvote_target_reached"))
+            state["application_thumbs_up_count"] = thumbs_up
+            state["upvote_target_reached"] = thumbs_up >= 6
+            if thumbs_up >= 6 and not previously_reached:
+                events.append((f"upvote-target:{thumbs_up}", "Community upvote target reached",
+                               app_comment["html_url"], f"The application has {thumbs_up} genuine thumbs-up reactions.",
+                               False, "Continue waiting for Espressif's response; do not post a reminder solely because the target was reached."))
         for c in comments:
             cid = int(c.get("id", 0)); state["last_seen_comment_id"] = max(state.get("last_seen_comment_id", 0), cid)
             body = c.get("body") or ""

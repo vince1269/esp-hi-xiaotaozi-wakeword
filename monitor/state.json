@@ -9,5 +9,7 @@
   "release_matches": [],
   "issue_state": "open",
   "consecutive_failures": 0,
+  "application_thumbs_up_count": 0,
+  "upvote_target_reached": false,
   "submitted_at": "2026-08-03T08:37:00Z"
 }
