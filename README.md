@@ -12,9 +12,9 @@ This repository tracks a WakeNet9s wake-word request for a personal, non-commerc
 
 ## Application status
 
-- Status: Preparing submission
-- Official application: Pending
-- Tracking issue: Pending
+- Status: Submitted; awaiting upstream response
+- Official application: https://github.com/espressif/esp-sr/issues/88#issuecomment-5164128467
+- Tracking issue: https://github.com/vince1269/esp-hi-xiaotaozi-wakeword/issues/1
 
 [![Monitor wake word](https://github.com/vince1269/esp-hi-xiaotaozi-wakeword/actions/workflows/monitor-wakeword.yml/badge.svg)](https://github.com/vince1269/esp-hi-xiaotaozi-wakeword/actions/workflows/monitor-wakeword.yml)
 
