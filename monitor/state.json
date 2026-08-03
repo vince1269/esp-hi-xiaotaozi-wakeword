@@ -1,7 +1,7 @@
 {
   "application_comment_id": 5164128467,
   "application_comment_url": "https://github.com/espressif/esp-sr/issues/88#issuecomment-5164128467",
-  "last_checked_at": "2026-08-03T08:49:06Z",
+  "last_checked_at": "2026-08-03T14:15:01Z",
   "last_seen_comment_id": 5164128467,
   "known_event_ids": [],
   "model_found": false,
@@ -9,6 +9,8 @@
   "release_matches": [],
   "issue_state": "open",
   "consecutive_failures": 0,
+  "application_body_sha256": "0cd88e9b8775808fa6482188783e679a4cb512f2da3b9152221f4a71e559aa07",
+  "application_comment_updated_at": "2026-08-03T08:37:57Z",
   "application_thumbs_up_count": 0,
   "upvote_target_reached": false,
   "submitted_at": "2026-08-03T08:37:00Z"
