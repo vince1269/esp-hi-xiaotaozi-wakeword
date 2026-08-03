@@ -8,6 +8,8 @@ If you would like ESP-SR to support the Chinese WakeNet9s wake word **“小桃�
 
 Please react to the existing comment rather than posting a duplicate request. Espressif's current guideline accepts an ongoing project with a public project link; more than five genuine upvotes can provide an additional community-demand signal.
 
+Community discussion: [Xiaozhi ESP32 Discussion #2169](https://github.com/78/xiaozhi-esp32/discussions/2169)
+
 This repository tracks a WakeNet9s wake-word request for a personal, non-commercial ESP-HI robotic dog project based on ESP32-C3.
 
 - Device: ESP-HI AI robotic dog
